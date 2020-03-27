@@ -10,6 +10,7 @@
 
   <form method="POST" enctype="multipart/form-data">
     <input type="file" name="file" id="file">
+    <input type="text" name="imgUrl" id="imgUrl">
     <input type="submit" value="Predict">
   </form>
 
@@ -18,6 +19,10 @@
     {% for res in data.results %}
       {{ res[1] }}: {{ res[2] }} <br>
     {% endfor %}
+  {% endif %}
+  {% if data and data.message %}
+    <h3>Message</h3>
+    {{ data.message }}
   {% endif %}
 
 </body>
