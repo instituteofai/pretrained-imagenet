@@ -50,10 +50,10 @@ def index():
       return render_template('index.html', data={'message': errorMessage })
     else:
       img = img_to_array(img)
-      results = C.predict(img)
+      result = C.predict(img)[0]
 
       data = {
-        'results': results,
+        'result': result,
         'errors': []
       }
 
