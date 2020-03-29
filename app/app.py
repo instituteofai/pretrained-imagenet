@@ -32,10 +32,12 @@ def index():
       print('file is uploaded!')
       img = f.read()
       img = Image.open(io.BytesIO(img))
+      img = img.convert('RGB')
     elif imgUrl:
       print('image url is given!')
       try:
-        img = Image.open(urllib.request.urlopen(imgUrl, timeout=15))
+        img = Image.open(urllib.request.urlopen(imgUrl, timeout=10))
+        img = img.convert('RGB')
       except (HTTPError, URLError) as error:
         errorMessage = error
       except timeout:
