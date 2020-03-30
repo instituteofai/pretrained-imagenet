@@ -17,7 +17,7 @@ print('model loading complete!')
 def predict(image):
 
   x = center_crop_and_resize(image, image_size=image_size)
-  image_modified = Image.fromarray(x, 'RGB')
+  image_modified = x
   x = preprocess_input(x)
   x = np.expand_dims(x, 0)
 

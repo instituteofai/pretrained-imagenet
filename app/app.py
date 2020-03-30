@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from PIL import Image
 import io
-from keras.preprocessing.image import img_to_array
+from keras.preprocessing.image import img_to_array, array_to_img
 import urllib.request
 from socket import timeout
 from urllib.error import HTTPError, URLError
@@ -56,12 +56,10 @@ def index():
       result = C.predict(img)
       # build the image
       img_object = io.BytesIO()
-      result['new_image'].save(img_object, 'JPEG')
+      array_to_img(result['new_image']).save(img_object, 'JPEG')
       # img_object.seek(0)
       img_64 = base64.b64encode(img_object.getvalue())
       img_encoded = u'data:img/jpeg;base64,'+img_64.decode('utf-8')
-     
-      # new_image = img_object.read()
 
       data = {
         'result': result['res'],
