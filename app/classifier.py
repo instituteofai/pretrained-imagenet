@@ -16,6 +16,7 @@ print('model loading complete!')
 def predict(image):
 
   x = center_crop_and_resize(image, image_size=image_size)
+  image_modified = x
   x = preprocess_input(x)
   x = np.expand_dims(x, 0)
 
@@ -23,5 +24,7 @@ def predict(image):
   tb._SYMBOLIC_SCOPE.value = True
   y = model.predict(x)
   res = decode_predictions(y)
-
-  return res[0]
+  # collect result and the modified image
+  data = { 'res': res[0][0], 'new_image': image_modified }
+  return data
+  

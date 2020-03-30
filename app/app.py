@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request
 from PIL import Image
 import io
-from keras.preprocessing.image import img_to_array
+from keras.preprocessing.image import img_to_array, array_to_img
 import urllib.request
 from socket import timeout
 from urllib.error import HTTPError, URLError
 
 import classifier as C
+import base64
 
 app = Flask(__name__)
 
@@ -29,7 +30,7 @@ def index():
     errorMessage = None
     imgUrl = request.form.get('imgUrl')
     if f:
-      print('file is uploaded!')
+      print('image is uploaded!')
       img = f.read()
       img = Image.open(io.BytesIO(img))
       img = img.convert('RGB')
@@ -41,7 +42,7 @@ def index():
       except (HTTPError, URLError) as error:
         errorMessage = error
       except timeout:
-        errorMessage = 'Timed out while reading the image!'
+        errorMessage = 'Oops, Timed out, while retrieving the image. Try with a diffrent image!'
       else:
         print('Image read successfully!')
       
@@ -52,10 +53,17 @@ def index():
       return render_template('index.html', data={'message': errorMessage })
     else:
       img = img_to_array(img)
-      result = C.predict(img)[0]
+      result = C.predict(img)
+      # build the image
+      img_object = io.BytesIO()
+      array_to_img(result['new_image']).save(img_object, 'JPEG')
+      # img_object.seek(0)
+      img_64 = base64.b64encode(img_object.getvalue())
+      img_encoded = u'data:img/jpeg;base64,'+img_64.decode('utf-8')
 
       data = {
-        'result': result,
+        'result': result['res'],
+        'image': img_encoded,
         'errors': []
       }
 
