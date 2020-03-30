@@ -133,6 +133,11 @@
         "Ummm... It might be a {{ data.result[1] }}"
       {% endif %}
       </div>
+      {% if data.image %}
+      <div>
+        <img src="{{ data.image }}" alt="Error" width="224" height="224">
+      </div>
+      {% endif %}
     {% endif %}
     {% if data and data.message %}
       <h3>Message</h3>
