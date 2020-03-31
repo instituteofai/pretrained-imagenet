@@ -8,6 +8,7 @@ from urllib.error import HTTPError, URLError
 
 import classifier as C
 import base64
+import re
 
 app = Flask(__name__)
 
@@ -61,8 +62,14 @@ def index():
       img_64 = base64.b64encode(img_object.getvalue())
       img_encoded = u'data:img/jpeg;base64,'+img_64.decode('utf-8')
 
+      # Remove underscores in prediction
+      predicted_category = re.sub('_', ' ', result['res'][1])
+
       data = {
-        'result': result['res'],
+        'result': {
+          'category': predicted_category,
+          'confidence': result['res'][2]
+        },
         'image': img_encoded,
         'errors': []
       }
